@@ -1,2 +1,2 @@
-# scml
-A scalable manifold learning (scML) method that can cope with large-scale and high-dimensional data in an efficient manner
+# scML: Scalable Manifold Learning by Uniform Landmark Sampling and Constrained Locally Linear Embedding
+We propose a scalable manifold learning (scML) method that can cope with large-scale and high-dimensional data in an efficient manner. It starts by seeking a set of landmarks to construct the low-dimensional skeleton of the entire data, and then incorporates the non-landmarks into this skeleton based on the constrained locally linear embedding. 
