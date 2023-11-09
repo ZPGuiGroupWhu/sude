@@ -11,7 +11,6 @@ SeuratPreprocess <- function(seuratSCE, filename, UMAP_Dim = 2){
   
   ## Normalization
   seuratSCE <- NormalizeData(seuratSCE)
-  # write.csv(seuratSCE@assays$RNA@data, file=file.path(filename, "Seurat.GeneExprMat.AllGene.Norm.csv"))
   
   ## Find HVG
   seuratSCE <- FindVariableFeatures(seuratSCE)
@@ -21,7 +20,6 @@ SeuratPreprocess <- function(seuratSCE, filename, UMAP_Dim = 2){
   
   ## Scaling Data
   seuratSCE <- ScaleData(seuratSCE, features = rownames(seuratSCE))
-  # write.csv(seuratSCE@assays$RNA@scale.data, file=file.path(filename, "Seurat.GeneExprMat.AllGene.Scaled.csv"))
   
   ## PCA & UMAP Embedding
   seuratSCE <- RunPCA(seuratSCE, features = VariableFeatures(object = seuratSCE), npcs=50)
