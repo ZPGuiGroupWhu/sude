@@ -2,7 +2,7 @@ library(readr)
 library(Seurat)
 
 ## This code aims to read the scRNA-seq data and convert it to a Seurat object. 
-## The input data is required to be organized as the following standard csv or 10X formats.
+## The input data is required to be organized as the following standard 10X format.
 
 BuildSeuratObject <- function (filename, datatype, labels){
   data <- Read10X(data.dir = filename)
