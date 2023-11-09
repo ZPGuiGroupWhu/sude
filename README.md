@@ -5,8 +5,8 @@ We propose a scalable manifold learning (scML) method that can cope with large-s
 
 # How To Run
 
-```ruby
-function [Y, id_samp] = scml(X,varargin)
+```matlab
+function [Y, id_samp] = scml(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
 %   the ID of landmarks sampled by PPS. Each row in X represents an observation.
 % 
@@ -14,9 +14,9 @@ function [Y, id_samp] = scml(X,varargin)
 %
 %   'NumDimensions'- A positive integer specifying the number of dimension of the representation Y. 
 %                    Default: 2
-%   'NumNeighbors' - A non-negative integer specifying the number of KNN for PPS to sample landmarks.
-%                    It must be smaller than N.
-%                    Default: 10
+%   'NumNeighbors' - A non-negative integer specifying the number of nearest neighbors for PPS to 
+%                    sample landmarks. It must be smaller than N.
+%                    Default: 20
 %   'Normalize'    - Logical scalar. If true, normalize X using min-max normalization. If features in 
 %                    X are on different scales, 'Normalize' should be set to true because the learning 
 %                    process is based on nearest neighbors and features with large scales can override 
@@ -30,7 +30,7 @@ function [Y, id_samp] = scml(X,varargin)
 %   'AggCoef'      - A positive scalar specifying the aggregation coefficient. 
 %                    Default: 1.2
 %   'MaxEpoch'     - Maximum number of epochs to take. 
-%                    Default: 500
+%                    Default: 50
 %   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
-%                    Default: 1e-7
+%                    Default: 1e-7   
 ```
