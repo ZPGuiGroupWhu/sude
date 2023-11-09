@@ -1,6 +1,6 @@
 % Input data
 clear;
-data = csvread('I:\降维\scRNA-seq\NdpKO _PCA.csv');
+data = csvread('benchmarks/ds3.csv');
 
 % Obtain data size and true annotations
 [~, m] = size(data);
@@ -10,7 +10,7 @@ clear data
 
 % Perform scML embedding
 t1 = clock;
-[Y,id] = scml(X,'NumNeighbors',20);
+[Y,id] = scml(X,'NumNeighbors',10);
 t2 = clock;
 disp(['Elapsed time:',num2str(etime(t2,t1)),'s']);
 plotcluster2(Y,ref);
