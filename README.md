@@ -37,7 +37,7 @@ function [Y, id_samp] = scml(X, varargin)
 ```
 
 Open the 'main' file, we provide an example
-```ruby
+```matlab
 % Input data
 clear;
 data = csvread('benchmarks/ds3.csv');
@@ -46,7 +46,7 @@ data = csvread('benchmarks/ds3.csv');
 [~, m] = size(data);
 ref = data(:,m);
 X = data(:,1:m-1);
-clear data
+clear data;
 
 % Perform scML embedding
 t1 = clock;
