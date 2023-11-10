@@ -35,6 +35,7 @@ function [Y, id_samp] = scml(X, varargin)
 %   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
 %                    Default: 1e-7   
 ```
+Open the 'main' file, we provide an example
 ```ruby
 % Input data
 clear;
@@ -52,3 +53,4 @@ t1 = clock;
 t2 = clock;
 disp(['Elapsed time:',num2str(etime(t2,t1)),'s']);
 plotcluster2(Y,ref);
+```
