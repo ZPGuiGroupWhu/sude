@@ -5,7 +5,7 @@ We propose a scalable manifold learning (scML) method that can cope with large-s
 ![image](https://github.com/ZPGuiGroupWhu/scml/blob/main/github.png)
 
 # How To Run
-
+The main code of scML is stored in 'scml' file. The main function provides numerous hyperparameters for user configuration as follow 
 ```matlab
 function [Y, id_samp] = scml(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
