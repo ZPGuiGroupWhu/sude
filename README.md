@@ -62,5 +62,5 @@ argparse (≥2.0.4), assertthat (≥0.2.1), BiocGenerics (≥0.40.0), BiocSingul
 
 > **ECG application**
 
-Deep Learning Toolbox
-Signal Processing Toolbox
+[Deep Learning Toolbox](https://ww2.mathworks.cn/products/deep-learning.html)
+[Signal Processing Toolbox](https://www.mathworks.com/products/signal.html)
