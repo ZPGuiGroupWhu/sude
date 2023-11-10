@@ -36,7 +36,7 @@ function [Y, id_samp] = scml(X, varargin)
 %                    Default: 1e-7   
 ```
 
-Open the 'main' file, we provide an example
+Open the 'main.m' file, we provide an example
 ```matlab
 % Input data
 clear;
@@ -55,3 +55,10 @@ t2 = clock;
 disp(['Elapsed time:',num2str(etime(t2,t1)),'s']);
 plotcluster2(Y,ref);
 ```
+# Depends
+> **scRNA-seq application**
+argparse (≥2.0.4), assertthat (≥0.2.1), BiocGenerics (≥0.40.0), BiocSingular (≥1.10.0), ClusterR (≥1.2.5), dotCall64 (≥1.0.1), fields (≥12.5), GenomeInfoDb (≥1.30.1), GenomicRanges (≥1.46.1), geometry (≥0.4.5), ggplot2 (≥3.3.5), grid (≥4.1.0), gtools (≥3.9.2), IRanges (≥2.28.0), MatrixGenerics (≥1.6.0), mclust (≥5.4.7), parallel (≥4.1.0), prodlim (≥2019.11.13), RcppHungarian (≥0.1), readr (≥1.4.0), reshape2 (≥1.4.4), S4Vectors (≥0.30.0), scran (≥1.22.1), scuttle (≥1.4.0), Seurat (≥4.0.5), SingleCellExperiment (≥1.16.0), spam (≥2.7.0), stats4 (≥4.1.0), SummarizedExperiment (≥1.24.0), uwot (≥0.1.10)
+
+> **ECG application**
+Deep Learning Toolbox
+Signal Processing Toolbox
