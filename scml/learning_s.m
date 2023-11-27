@@ -1,11 +1,11 @@
 function [Y, k2] = learning_s (X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc)
 % This function returns representation of the landmarks in the lower-dimensional space and the number of 
-% nearest neighbors of landamrks. It computes the gradient using the entire probability matrix P and Q.
+% nearest neighbors of landmarks. It computes the gradient using the entire probability matrix P and Q.
 
-% Obatin size and dimension of landmarks
+% Obtain size and dimension of landmarks
 [N, dim] = size(X_samp);
 
-% Compute the number of nearest neighbors of landamrks adaptively
+% Compute the number of nearest neighbors of landmarks adaptively
 if (N < 9)
     k2 = N;
 else
@@ -43,7 +43,7 @@ else
     else
         [samp_knn, samp_dis]= knnsearch(X_samp,X_samp,'k',k2);
     end    
-    P = sparse(repmat((1:N)',k2,1),samp_knn(:),exp(-0.5*samp_dis.^2./max(mean(samp_dis,2).^2,realmin))');
+    P = sparse(repmat((1:N)',k2,1),samp_knn(:),exp(-0.5*samp_dis.^2./max(mean(samp_dis,2).^2,realmin)));
 end
 % Symmetrize matrix P 
 P = sparse((P + P'))/2;
@@ -51,7 +51,7 @@ clear xx get_knn rnn id_samp samp_knn samp_dis snn_id SNN knn_rnn_mat
 
 % Initialize embedding Y of landmarks
 if strcmp(initialize,'le')
-    Dg = diag(sum(P,1));
+    Dg = diag(sum(P));
     L = Dg - P;
     L = Dg.^(0.5)*L*Dg.^(0.5);
     [Y, ~] = eigs(L,no_dims+1,eps);
@@ -80,6 +80,7 @@ KL(isnan(KL)) = 0;
 cost = sum(sum(KL));
 vcc = 1;
 epoch = 1;
+len = 2;
 while epoch <= T_epoch && vcc > T_vcc
     % Compute gradient
     ProMatY = 4*(P-Q).*Q1.*QQ1;
@@ -102,10 +103,8 @@ while epoch <= T_epoch && vcc > T_vcc
        alpha = alpha*0.99;
     end
     % Compute variation coefficient of the last three KLD costs
-    len = 2;
     if(epoch > len)
-        vcc = (len-1)*var(cost(end-len:end))./(len*mean(cost(end-len:end)));
+        vcc = (len./(len+1))*var(cost(end-len:end))./mean(cost(end-len:end));
     end
 end
 disp([num2str(epoch-1),' epochs have been computed!']);
-end
