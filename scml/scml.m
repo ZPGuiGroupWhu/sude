@@ -1,19 +1,22 @@
-function [Y, id_samp] = scml(X, varargin)
+function [Y, id_samp, para] = scml(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
 %   the ID of landmarks sampled by PPS. Each row in X represents an observation.
 % 
 %   Parameters are: 
-%
+% 
 %   'NumDimensions'- A positive integer specifying the number of dimension of the representation Y. 
 %                    Default: 2
 %   'NumNeighbors' - A non-negative integer specifying the number of nearest neighbors for PPS to 
 %                    sample landmarks. It must be smaller than N.
-%                    Default: 20
+%                    Default: adaptive
 %   'Normalize'    - Logical scalar. If true, normalize X using min-max normalization. If features in 
 %                    X are on different scales, 'Normalize' should be set to true because the learning 
 %                    process is based on nearest neighbors and features with large scales can override 
 %                    the contribution of features with small scales. 
 %                    Default: True
+%   'LargeData'    - Logical scalar. If true, the data can be split into multiple blocks to avoid the problem 
+%                    of memory overflow, and the gradient can be computed block by block using 'learning_l' function.                    
+%                    Default: False
 %   'InitMethod'   - A string specifying the method for initializing Y before manifold learning. 
 %       'le'       - Laplacian eigenmaps.
 %       'pca'      - Principal component analysis.
@@ -25,14 +28,24 @@ function [Y, id_samp] = scml(X, varargin)
 %                    Default: 50
 %   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
 %                    Default: 1e-7                   
-                   
-% Specify default parameters
-paramNames = {'NumDimensions','NumNeighbors','Normalize','InitMethod','AggCoef','MaxEpoch','TolVcc'};
-defaults   = {2,20,true,'le',1.2,50,1e-7};
-[no_dims,k1,normalize,initialize,agg_coef,T_epoch,T_vcc] = internal.stats.parseArgs(paramNames, defaults, varargin{:});
 
-% Obatin size and dimension of data
+% Obtain size and dimension of data
 [n, dim] = size(X);
+
+% Specify default parameters
+paramNames = {'NumDimensions','NumNeighbors','Normalize','LargeData','InitMethod','AggCoef','MaxEpoch','TolVcc'};
+defaults   = {2,20,true,false,'le',1.2,50,1e-7};
+if(n>20000)
+    defaults{2} = 50;
+elseif(n>10000)
+    defaults{2} = 20;
+elseif(n>2000)
+    defaults{2} = 10;
+else
+    defaults{2} = 0;
+end
+[no_dims, k1, normalize, large, initialize, agg_coef, T_epoch, T_vcc] = internal.stats.parseArgs(paramNames, defaults, varargin{:});
+para = [paramNames;defaults];
 
 % Normalize the data
 if normalize
@@ -58,12 +71,10 @@ end
 X_samp = X(id_samp,:);
 
 % Compute embedding of landmarks
-if(length(id_samp) <= 40000)
-   [Y_samp, k2] = learning_s(X_samp,k1,get_knn,rnn,id_samp,no_dims,initialize,agg_coef,T_epoch,T_vcc);
+if ~large
+   [Y_samp, k2] = learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc);
 else
-    % Excessive data size may cause the probelm of memory overflow. Split the data into mutiple blocks
-    % and compute the gradient block by block using 'learning_l' function
-   [Y_samp, k2] = learning_l(X_samp,k1,get_knn,rnn,id_samp,no_dims,initialize,agg_coef,T_epoch,T_vcc);
+   [Y_samp, k2] = learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc);
 end
 
 % Compute embedding of non-landmarks
@@ -74,12 +85,12 @@ if(k1 > 0)
     % Compute the optimal scale for each landmark
     scale = opt_scale(X_samp, Y_samp, k2);
     top_k = no_dims+1;
-    near_samp = knnsearch(X_samp,X_rest,'k',top_k);
+    [near_samp, near_dis] = knnsearch(X_samp,X_rest,'k',top_k);
     for i=1:length(id_rest)
         near_top_k = near_samp(i,:);
         top_X = X_samp(near_top_k,:);
         top_Y = Y_samp(near_top_k,:);
-        N_dis = pdist2(X_rest(i,:),top_X(1,:))*scale(near_top_k(1));
+        N_dis = near_dis(i,1)*scale(near_top_k(1));
         % Perform CLLE
         Y_rest(i,:) = clle(top_X,top_Y,X_rest(i,:),N_dis);
     end
@@ -87,7 +98,5 @@ if(k1 > 0)
     Y(id_rest,:) = Y_rest;
     Y(id_samp,:) = Y_samp;
 else
-    Y = zeros(n,no_dims);
-    Y(id_samp,:) = Y_samp;
-end
+    Y = Y_samp;
 end
