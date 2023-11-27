@@ -53,7 +53,7 @@ if strcmp(initialize,'le')
     Dg = diag(sum(P));
     L = Dg - P;
     L = Dg.^(0.5)*L*Dg.^(0.5);
-    [Y, ~] = eigs(L,no_dims+1,eps);
+    [Y, ~] = eigs(L,no_dims+1,'smallestabs');
     Y(:,1)=[];
 elseif strcmp(initialize,'pca')
     Y = pca(X_samp,no_dims);
