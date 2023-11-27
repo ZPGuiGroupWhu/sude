@@ -33,4 +33,3 @@ if min(lab==fix(lab))==1 && all(lab >= 0)
 else
     disp('WARNING: clustering annotation must be a non-negative integer!');
 end
-end
