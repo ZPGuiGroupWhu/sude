@@ -29,6 +29,9 @@ function [Y, id_samp, para] = scml(X, varargin)
 %   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
 %                    Default: 1e-7                   
 
+% Remove duplicate observations
+[X, ~, orig_id] = unique(X, 'rows');
+
 % Obtain size and dimension of data
 [n, dim] = size(X);
 
@@ -94,9 +97,12 @@ if(k1 > 0)
         % Perform CLLE
         Y_rest(i,:) = clle(top_X,top_Y,X_rest(i,:),N_dis);
     end
-    Y = zeros(n,no_dims);
-    Y(id_rest,:) = Y_rest;
-    Y(id_samp,:) = Y_samp;
+    YY = zeros(n,no_dims);
+    YY(id_rest,:) = Y_rest;
+    YY(id_samp,:) = Y_samp;
 else
-    Y = Y_samp;
+    YY = Y_samp;
 end
+
+% Generate final result
+Y = YY(orig_id,:);
