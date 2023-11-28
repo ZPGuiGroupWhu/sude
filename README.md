@@ -6,6 +6,7 @@ We propose a scalable manifold learning (scML) method that can cope with large-s
 
 # How To Run
 > **MATLAB**
+
 The MATLAB code of scML is in the 'scml' file, where the 'scml' function provides numerous hyperparameters for user configuration as follows 
 ```matlab
 function [Y, id_samp, para] = scml(X, varargin)
@@ -59,7 +60,9 @@ t2 = clock;
 disp(['Elapsed time:', num2str(etime(t2,t1)),'s']);
 plotcluster2(Y, ref);
 ```
+
 > **PYTHON**
+
 The Python code of scML is in the 'scml_py' file, where the 'scml' function provides numerous hyperparameters for user configuration as follows
 ```python
 def scml(
@@ -73,38 +76,6 @@ def scml(
     T_epoch = 50,
     T_vcc = 1e-7
 ):
-    """
-    This function returns representation of the N by D matrix X in the lower-dimensional space. Each row in X
-    represents an observation.
-
-    Parameters are:
-
-    'no_dims'      - A positive integer specifying the number of dimension of the representation Y.
-                   Default: 2
-    'k1'           - A non-negative integer specifying the number of nearest neighbors for PPS to
-                   sample landmarks. It must be smaller than N.
-                   Default: adaptive
-    'normalize'    - Logical scalar. If true, normalize X using min-max normalization. If features in
-                   X are on different scales, 'Normalize' should be set to true because the learning
-                   process is based on nearest neighbors and features with large scales can override
-                   the contribution of features with small scales.
-                   Default: True
-    'large'        - Logical scalar. If true, the data can be split into multiple blocks to avoid the problem
-                   of memory overflow, and the gradient can be computed block by block using 'learning_l' function.
-                   Default: False
-    'initialize'   - A string specifying the method for initializing Y before manifold learning.
-        'le'       - Laplacian eigenmaps.
-        'pca'      - Principal component analysis.
-        'mds'      - Multidimensional scaling.
-                   Default: 'le'
-    'agg_coef'     - A positive scalar specifying the aggregation coefficient.
-                   Default: 1.2
-    'T_epoch'      - Maximum number of epochs to take.
-                   Default: 50
-    'T_vcc'        - Termination tolerance for variation coefficient of the last three KLD costs.
-                   Default: 1e-7
-
-    """
 ```
 
 Open the 'main.m' file, we provide an example
@@ -133,6 +104,7 @@ print("Elapsed time:", end_time - start_time, 's')
 plt.scatter(Y[:, 0], Y[:, 1], c=ref, cmap='tab10', s=4)
 plt.show()
 ```
+
 # Depends
 > **scRNA-seq application**
 
