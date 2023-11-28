@@ -7,7 +7,7 @@ We propose a scalable manifold learning (scML) method that can cope with large-s
 # How To Run
 > **MATLAB**
 
-MATLAB code of scML is in the 'scml' file, where the 'scml' function provides multiple hyperparameters for user configuration as follows 
+MATLAB code of scML is in the 'scml_mat' file, where the 'scml' function provides multiple hyperparameters for user configuration as follows 
 ```matlab
 function [Y, id_samp, para] = scml(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
