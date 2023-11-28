@@ -103,7 +103,7 @@ while epoch <= T_epoch && vcc > T_vcc
        alpha = alpha*0.99;
     end
     % Compute variation coefficient of the last three KLD costs
-    if(epoch > len)
+    if(epoch > 10)
         vcc = (len./(len+1))*var(cost(end-len:end))./mean(cost(end-len:end));
     end
 end
