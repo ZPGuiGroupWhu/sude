@@ -41,7 +41,7 @@ function [Y, id_samp, para] = scml(X, varargin)
 %                    Default: 1e-7    
 ```
 
-Open the 'main.m' file, we provide an example
+The 'main.m' file provides an example
 ```matlab
 % Input data
 clear;
@@ -110,7 +110,7 @@ def scml(
 """
 ```
 
-Open the 'main.py' file, we provide an example
+The 'main.py' file provides an example
 ```python
 import pandas as pd
 import numpy as np
