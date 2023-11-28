@@ -66,7 +66,7 @@ P = P/(sum(P(:))-N);
 clear Dg L
 
 % Compute the start and end markers of each data block
-no_blocks = ceil(N/10);
+no_blocks = ceil(N/20000);
 mark = zeros(no_blocks,2);
 for i=1:no_blocks
    mark(i,:) = [(i-1)*ceil(N/no_blocks)+1,min(i*ceil(N/no_blocks),N)];
@@ -112,7 +112,7 @@ while epoch <= T_epoch  && vcc > T_vcc
         alpha = alpha*0.99;
     end
     % Compute variation coefficient of the last three KLD costs
-    if(epoch > len)
+    if(epoch > 11)
         vcc = (len./(len+1))*var(cost(end-len:end))./mean(cost(end-len:end));
     end
     epoch = epoch + 1;
