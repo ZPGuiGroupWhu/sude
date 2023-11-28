@@ -78,14 +78,13 @@ def scml(
 ):
 ```
 
-Open the 'main.m' file, we provide an example
+Open the 'main.py' file, we provide an example
 ```python
 import pandas as pd
 import numpy as np
 from scml import scml
 import time
 import matplotlib.pyplot as plt
-
 
 # Input data
 data = np.array(pd.read_csv('benchmarks/ds3.csv', header=None))
