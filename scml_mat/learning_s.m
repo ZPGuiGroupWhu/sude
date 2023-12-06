@@ -1,4 +1,4 @@
-function [Y, k2] = learning_s (X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc)
+function [Y, k2] = learning_s (X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch)
 % This function returns representation of the landmarks in the lower-dimensional space and the number of 
 % nearest neighbors of landmarks. It computes the gradient using the entire probability matrix P and Q.
 
@@ -10,7 +10,7 @@ if (N < 9)
     k2 = N;
 else
     if(N > 1000)
-        k2 = ceil(log(N)/log(2))+18;
+        k2 = ceil(log(N)/log(2)) + 18;
     elseif(N > 50)
         k2 = ceil(0.02*N) + 8;
     else
@@ -66,45 +66,30 @@ end
 P = P/(sum(P(:))-N);
 clear Dis Dg L
 
-% Compute matrix Q
-D = pdist2(Y,Y).^2;
-Q1 = 1./(1+log(1+D));
-QQ1 = 1./(1+D);
-Q = Q1/(sum(Q1(:))-N);
-
 % Initialization
-alpha = 2.5*N;
+max_alpha = 2.5*N;
+min_alpha = 2*N;
+warm_step = 10;
 preGrad = zeros(N,no_dims);
-KL = -P.*log(Q);
-KL(isnan(KL)) = 0;
-cost = sum(sum(KL));
-vcc = 1;
 epoch = 1;
-len = 2;
-while epoch <= T_epoch && vcc > T_vcc
+while epoch <= T_epoch
+    % Update learning rate
+    if(epoch <= warm_step)
+        alpha = max_alpha;
+    else
+        alpha = min_alpha + 0.5*(max_alpha-min_alpha)*(1+cos(pi*((epoch-warm_step)/(T_epoch-warm_step))));
+    end
+    % Compute low-dimensional probability matrix Q
+    D = pdist2(Y,Y).^2;
+    Q1 = 1./(1+log(1+D));
+    QQ1 = 1./(1+D);
+    Q = Q1/(sum(Q1(:))-N); 
     % Compute gradient
     ProMatY = 4*(P-Q).*Q1.*QQ1;
     grad = (diag(sum(ProMatY))-ProMatY)*Y; 
     % Update embedding Y
     Y = Y - alpha*(grad+(epoch-1)./(epoch+2)*preGrad);
     preGrad = grad;
-    % Update matrix Q
-    D = pdist2(Y,Y).^2;
-    Q1 = 1./(1+log(1+D));
-    QQ1 = 1./(1+D);
-    Q = Q1/(sum(Q1(:))-N); 
-    % Compute KLD cost
     epoch = epoch + 1;
-    KL = -P.*log(Q);
-    KL(isnan(KL)) = 0;
-    cost = [cost;sum(KL(:))];
-    % Update learning rate
-    if((cost(end)-cost(end-1))>0)
-       alpha = alpha*0.99;
-    end
-    % Compute variation coefficient of the last three KLD costs
-    if(epoch > 10)
-        vcc = (len./(len+1))*var(cost(end-len:end))./mean(cost(end-len:end));
-    end
 end
 disp([num2str(epoch-1),' epochs have been computed!']);
