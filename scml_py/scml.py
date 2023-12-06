@@ -8,16 +8,16 @@ from opt_scale import opt_scale
 from clle import clle
 import numpy as np
 
+
 def scml(
-    X,
-    no_dims = 2,
-    k1 = 20,
-    normalize = True,
-    large = False,
-    initialize = 'le',
-    agg_coef = 1.2,
-    T_epoch = 50,
-    T_vcc = 1e-7
+        X,
+        no_dims=2,
+        k1=20,
+        normalize=True,
+        large=False,
+        initialize='le',
+        agg_coef=1.2,
+        T_epoch=50
 ):
     """
     This function returns representation of the N by D matrix X in the lower-dimensional space. Each row in X
@@ -47,8 +47,6 @@ def scml(
                    Default: 1.2
     'T_epoch'      - Maximum number of epochs to take.
                    Default: 50
-    'T_vcc'        - Termination tolerance for variation coefficient of the last three KLD costs.
-                   Default: 1e-7
 
     """
     # Remove duplicate observations
@@ -79,9 +77,9 @@ def scml(
 
     # Compute embedding of landmarks
     if not large:
-        Y_samp, k2 = learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc)
+        Y_samp, k2 = learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch)
     else:
-        Y_samp, k2 = learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc)
+        Y_samp, k2 = learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch)
 
     # Compute embedding of non-landmarks
     if k1 > 0:
