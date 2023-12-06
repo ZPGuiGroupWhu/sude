@@ -36,9 +36,7 @@ function [Y, id_samp, para] = scml(X, varargin)
 %   'AggCoef'      - A positive scalar specifying the aggregation coefficient. 
 %                    Default: 1.2
 %   'MaxEpoch'     - Maximum number of epochs to take. 
-%                    Default: 50
-%   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
-%                    Default: 1e-7    
+%                    Default: 50 
 ```
 
 The 'main.m' file provides an example
@@ -75,7 +73,6 @@ def scml(
     initialize = 'le',
     agg_coef = 1.2,
     T_epoch = 50,
-    T_vcc = 1e-7
 ):
 """
     This function returns representation of the N by D matrix X in the lower-dimensional space. Each row in X
@@ -105,8 +102,6 @@ def scml(
                    Default: 1.2
     'T_epoch'      - Maximum number of epochs to take.
                    Default: 50
-    'T_vcc'        - Termination tolerance for variation coefficient of the last three KLD costs.
-                   Default: 1e-7
 """
 ```
 
