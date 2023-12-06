@@ -25,9 +25,7 @@ function [Y, id_samp, para] = scml(X, varargin)
 %   'AggCoef'      - A positive scalar specifying the aggregation coefficient. 
 %                    Default: 1.2
 %   'MaxEpoch'     - Maximum number of epochs to take. 
-%                    Default: 50
-%   'TolVcc'       - Termination tolerance for variation coefficient of the last three KLD costs. 
-%                    Default: 1e-7                   
+%                    Default: 50                 
 
 % Remove duplicate observations
 [X, ~, orig_id] = unique(X, 'rows');
@@ -36,8 +34,8 @@ function [Y, id_samp, para] = scml(X, varargin)
 [n, dim] = size(X);
 
 % Specify default parameters
-paramNames = {'NumDimensions','NumNeighbors','Normalize','LargeData','InitMethod','AggCoef','MaxEpoch','TolVcc'};
-defaults   = {2,20,true,false,'le',1.2,50,1e-7};
+paramNames = {'NumDimensions','NumNeighbors','Normalize','LargeData','InitMethod','AggCoef','MaxEpoch'};
+defaults   = {2,[],true,false,'le',1.2,50};
 if(n>20000)
     defaults{2} = 50;
 elseif(n>10000)
@@ -47,7 +45,7 @@ elseif(n>2000)
 else
     defaults{2} = 0;
 end
-[no_dims, k1, normalize, large, initialize, agg_coef, T_epoch, T_vcc] = internal.stats.parseArgs(paramNames, defaults, varargin{:});
+[no_dims, k1, normalize, large, initialize, agg_coef, T_epoch] = internal.stats.parseArgs(paramNames, defaults, varargin{:});
 para = [paramNames;defaults];
 
 % Normalize the data
@@ -75,9 +73,9 @@ X_samp = X(id_samp,:);
 
 % Compute embedding of landmarks
 if ~large
-   [Y_samp, k2] = learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc);
+   [Y_samp, k2] = learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch);
 else
-   [Y_samp, k2] = learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc);
+   [Y_samp, k2] = learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch);
 end
 
 % Compute embedding of non-landmarks
@@ -88,7 +86,11 @@ if(k1 > 0)
     % Compute the optimal scale for each landmark
     scale = opt_scale(X_samp, Y_samp, k2);
     top_k = no_dims+1;
-    [near_samp, near_dis] = knnsearch(X_samp,X_rest,'k',top_k);
+    if(n >= 5000 && dim >= 50)
+        [near_samp, near_dis] = knnsearch(xx(id_samp,:),xx(id_rest,:),'k',top_k);
+    else
+        [near_samp, near_dis] = knnsearch(X_samp,X_rest,'k',top_k);
+    end
     for i=1:length(id_rest)
         near_top_k = near_samp(i,:);
         top_X = X_samp(near_top_k,:);
