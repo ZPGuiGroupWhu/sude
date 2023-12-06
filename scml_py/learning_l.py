@@ -1,16 +1,16 @@
 from sklearn.neighbors import NearestNeighbors
 from scipy.sparse import diags
 from scipy.sparse import csr_matrix
-import scipy.sparse.linalg as sp_linalg
 from scipy.spatial.distance import cdist
 from init_pca import init_pca
 from pca import pca
 from mds import mds
+import scipy.sparse.linalg as sp_linalg
 import numpy as np
 import math
 
 
-def learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc):
+def learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch):
     """
     This function returns representation of the landmarks in the lower-dimensional space and the number of nearest
     neighbors of landmarks. It computes the gradient using probability matrix P and Q of data blocks.
@@ -80,23 +80,27 @@ def learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef,
     P = P / (np.sum(P) - N)
 
     # Compute the start and end markers of each data block
-    no_blocks = math.ceil(N / 1000)
+    no_blocks = math.ceil(N / 3000)
     mark = np.zeros((no_blocks, 2))
     for i in range(no_blocks):
         mark[i, :] = [i * math.ceil(N / no_blocks), min((i + 1) * math.ceil(N / no_blocks) - 1, N - 1)]
 
     # Initialization
-    alpha = 2.5 * N
+    max_alpha = 2.5 * N
+    min_alpha = 2 * N
+    warm_step = 10
     preGrad = np.zeros((N, no_dims))
-    cost = []
-    vcc = 1
     epoch = 1
-    length = 3
-    while epoch <= T_epoch and vcc > T_vcc:
+    while epoch <= T_epoch:
+        # Update learning rate
+        if epoch <= warm_step:
+            alpha = max_alpha
+        else:
+            alpha = min_alpha + 0.5 * (max_alpha - min_alpha) * (
+                        1 + np.cos(np.pi * ((epoch - warm_step) / (T_epoch - warm_step))))
         Pgrad = np.zeros((N, no_dims))
         Qgrad = np.zeros((N, no_dims))
         sumQ = 0
-        KL = 0
         # Compute gradient
         for i in range(no_blocks):
             idx = [j for j in range(int(mark[i, 0]), int(mark[i, 1]) + 1)]
@@ -115,19 +119,9 @@ def learning_l(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef,
             Qgrad[idx] = Qmat @ Y
             del Pmat, Qmat
             sumQ = sumQ + np.sum(Q1)
-            KL = KL - np.sum(P[idx, :].multiply(np.log(Q1)))
         # Update embedding Y
         Y = Y - alpha * (Pgrad - Qgrad / (sumQ - N) + (epoch - 1) / (epoch + 2) * preGrad)
         preGrad = Pgrad - Qgrad / (sumQ - N)
-        # Compute KLD cost
-        KL = KL + np.sum(P) * np.log(sumQ - N)
-        cost = np.append(cost, KL)
-        # Update learning rate
-        if epoch > 1 and (cost[-1] - cost[-2]) > 0:
-            alpha = alpha * 0.99
-        # Compute variation coefficient of the last three KLD costs
-        if epoch > 11:
-            vcc = np.var(cost[-length:]) / np.mean(cost[-length:])
         epoch = epoch + 1
 
     print(str(epoch - 1) + ' epochs have been computed!')
