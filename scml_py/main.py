@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 # Input data
-data = np.array(pd.read_csv('benchmarks/mnist.csv', header=None))
+data = np.array(pd.read_csv('benchmarks/ds3.csv', header=None))
 
 # Obtain data size and true annotations
 m = data.shape[1]
