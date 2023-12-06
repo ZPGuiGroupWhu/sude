@@ -9,7 +9,7 @@ from mds import mds
 import numpy as np
 
 
-def learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc):
+def learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch):
     """
     This function returns representation of the landmarks in the lower-dimensional space and the number of nearest
     neighbors of landmarks. It computes the gradient using the entire probability matrix P and Q.
@@ -76,45 +76,32 @@ def learning_s(X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef,
     # Normalize matrix P
     P = P / (np.sum(P) - N)
 
-    # Compute matrix Q
-    D = cdist(Y, Y) ** 2
-    Q1 = 1 / (1 + np.log(1 + D))
-    QQ1 = 1 / (1 + D)
-    del D
-    Q = Q1 / (np.sum(Q1) - N)
-
     # Initialization
-    alpha = 2.5 * N
+    max_alpha = 2.5 * N
+    min_alpha = 2 * N
+    warm_step = 10
     preGrad = np.zeros((N, no_dims))
-    KL = -P * np.log(Q)
-    KL[np.isnan(KL)] = 0
-    cost = np.sum(KL)
-    vcc = 1
     epoch = 1
-    length = 3
-    while epoch <= T_epoch and vcc > T_vcc:
+    while epoch <= T_epoch:
+        # Update learning rate
+        if epoch <= warm_step:
+            alpha = max_alpha
+        else:
+            alpha = min_alpha + 0.5 * (max_alpha - min_alpha) * (
+                        1 + np.cos(np.pi * ((epoch - warm_step) / (T_epoch - warm_step))))
+        # Update matrix Q
+        D = cdist(Y, Y) ** 2
+        Q1 = 1 / (1 + np.log(1 + D))
+        QQ1 = 1 / (1 + D)
+        Q = Q1 / (np.sum(Q1) - N)
         # Compute gradient
         ProMatY = 4 * (P - Q) * Q1 * QQ1
         grad = (np.diag(np.sum(ProMatY, axis=0)) - ProMatY) @ Y
         # Update embedding Y
         Y = Y - alpha * (grad + (epoch - 1) / (epoch + 2) * preGrad)
         preGrad = grad
-        # Update matrix Q
-        D = cdist(Y, Y) ** 2
-        Q1 = 1 / (1 + np.log(1 + D))
-        QQ1 = 1 / (1 + D)
-        Q = Q1 / (np.sum(Q1) - N)
         # Compute KLD cost
         epoch = epoch + 1
-        KL = -P * np.log(Q)
-        KL[np.isnan(KL)] = 0
-        cost = np.append(cost, np.sum(KL))
-        # Update learning rate
-        if (cost[-1] - cost[-2]) > 0:
-            alpha = alpha * 0.99
-        # Compute variation coefficient of the last three KLD costs
-        if epoch > 10:
-            vcc = np.var(cost[-length:]) / np.mean(cost[-length:])
 
     print(str(epoch - 1) + ' epochs have been computed!')
     return Y, k2
