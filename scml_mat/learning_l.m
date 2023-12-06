@@ -1,4 +1,4 @@
-function [Y, k2] = learning_l (X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch, T_vcc)
+function [Y, k2] = learning_l (X_samp, k1, get_knn, rnn, id_samp, no_dims, initialize, agg_coef, T_epoch)
 % This function returns representation of the landmarks in the lower-dimensional space and the number of 
 % nearest neighbors of landamrks. It computes the gradient using probability matrix P and Q of data blocks.
 
@@ -73,17 +73,21 @@ for i=1:no_blocks
 end
 
 % Initialization
-alpha = 2.5*N;
+max_alpha = 2.5*N;
+min_alpha = 2*N;
+warm_step = 10;
 preGrad = zeros(N,no_dims);
 epoch = 1;
-vcc = 1;
-cost = [];
-len = 2;
-while epoch <= T_epoch  && vcc > T_vcc
+while epoch <= T_epoch
+    % Update learning rate
+    if(epoch <= warm_step)
+        alpha = max_alpha;
+    else
+        alpha = min_alpha + 0.5*(max_alpha-min_alpha)*(1+cos(pi*((epoch-warm_step)/(T_epoch-warm_step))));
+    end
     Pgrad = zeros(N,no_dims);
     Qgrad = zeros(N,no_dims);
     sumQ = 0;
-    KL = 0;
     % Compute gradient
     for i = 1:no_blocks
         idx = mark(i,1):mark(i,2);
@@ -99,22 +103,10 @@ while epoch <= T_epoch  && vcc > T_vcc
         Pgrad(idx,:) = Pmat*Y;
         Qgrad(idx,:) = Qmat*Y;
         sumQ = sumQ + sum(Q1(:));    
-        KL = KL - sum(sum(P(idx,:).*log(Q1)));
     end
     % Update embedding Y
     Y = Y - alpha*(Pgrad - Qgrad/(sumQ-N) + (epoch-1)/(epoch+2)*preGrad);
     preGrad = Pgrad - Qgrad/(sumQ-N);
-    % Compute KLD cost
-    KL = KL + sum(P(:))*log(sumQ-N);
-    cost = [cost;KL];
-    % Update learning rate
-    if(epoch > 1)&&(cost(end)-cost(end-1))>0
-        alpha = alpha*0.99;
-    end
-    % Compute variation coefficient of the last three KLD costs
-    if(epoch > 11)
-        vcc = (len./(len+1))*var(cost(end-len:end))./mean(cost(end-len:end));
-    end
     epoch = epoch + 1;
 end
 disp([num2str(epoch-1),' epochs have been computed!']);
