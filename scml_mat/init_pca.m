@@ -29,10 +29,11 @@ C(isinf(C)) = 0;
 [lambda, ind] = sort(diag(lambda), 'descend');
 
 % Obtain the best PCA dimension
-if m < 2001
-    bestDim = max(no_dims+1, find(cumsum(lambda)/sum(lambda) < contri, 1, 'last' ));
+idx = cumsum(lambda)/sum(lambda) < contri;
+if max(idx)==0
+    bestDim = no_dims+1;
 else
-    bestDim = max(no_dims+1, find(cumsum(lambda)/sum(lambda(1:2000)) < contri, 1, 'last' ));
+    bestDim = max(no_dims+1, min(find(idx, 1, 'last' ),2000));
 end
 
 % Apply mapping on the data
