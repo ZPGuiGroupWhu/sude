@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from scml import scml
+from sude import sude
 import time
 import matplotlib.pyplot as plt
 
@@ -13,9 +13,9 @@ m = data.shape[1]
 X = data[:, :m - 1]
 ref = data[:, m - 1]
 
-# Perform scML embedding
+# Perform SUDE embedding
 start_time = time.time()
-Y = scml(X, k1=0, large=1)
+Y = sude(X, k1=0, large=1)
 end_time = time.time()
 print("Elapsed time:", end_time - start_time, 's')
 
