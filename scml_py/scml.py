@@ -9,7 +9,7 @@ from clle import clle
 import numpy as np
 
 
-def scml(
+def sude(
         X,
         no_dims=2,
         k1=20,
