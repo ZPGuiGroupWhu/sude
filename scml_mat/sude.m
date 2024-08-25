@@ -1,4 +1,4 @@
-function [Y, id_samp, para] = scml(X, varargin)
+function [Y, id_samp, para] = sude(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
 %   the ID of landmarks sampled by PPS. Each row in X represents an observation.
 % 
