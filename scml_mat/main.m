@@ -9,7 +9,7 @@ ref = data(:, m);
 X = data(:, 1:m-1);
 clear data
 
-% Perform scML embedding
+% Perform SUDE embedding
 t1 = clock;
 [Y, idx, para] = sude(X,'NumNeighbors',10);
 t2 = clock;
