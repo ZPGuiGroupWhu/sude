@@ -11,7 +11,7 @@ clear data
 
 % Perform scML embedding
 t1 = clock;
-[Y, idx, para] = scml(X,'NumNeighbors',10);
+[Y, idx, para] = sude(X,'NumNeighbors',10);
 t2 = clock;
 disp(['Elapsed time:', num2str(etime(t2,t1)),'s']);
 plotcluster2(Y, ref);
