@@ -1,15 +1,15 @@
 ![image](https://img.shields.io/badge/MATLAB-R2022a-brightgreen) ![image](https://img.shields.io/badge/Python-3.11-blue) ![image](https://img.shields.io/badge/R-4.1.0-red) 
 # Scalable manifold learning unveils intrinsic structure of high-dimensional data by uniform and discriminative embedding
-We propose a scalable manifold learning (SUDE) method that can cope with large-scale and high-dimensional data in an efficient manner. It starts by seeking a set of landmarks to construct the low-dimensional skeleton of the entire data, and then incorporates the non-landmarks into this skeleton based on the constrained locally linear embedding. This toolkit includes the main code of scML, and also two applications for preprocess scRNA-seq and ECG data.Scalable manifold learning unveils intrinsic structure of high-dimensional data by uniform and discriminative embedding
+We propose a scalable manifold learning (SUDE) method that can cope with large-scale and high-dimensional data in an efficient manner. It starts by seeking a set of landmarks to construct the low-dimensional skeleton of the entire data, and then incorporates the non-landmarks into this skeleton based on the constrained locally linear embedding. This toolkit includes the main code of SUDE, and also two applications for preprocess scRNA-seq and ECG data.Scalable manifold learning unveils intrinsic structure of high-dimensional data by uniform and discriminative embedding
 
 ![image](https://github.com/ZPGuiGroupWhu/scml/blob/main/github.png)
 
 # How To Run
 > **MATLAB**
 
-MATLAB code of scML is in the 'scml_mat' file, where the 'scml' function provides multiple hyperparameters for user configuration as follows 
+MATLAB code of SUDE is in the 'sude_mat' file, where the 'sude' function provides multiple hyperparameters for user configuration as follows 
 ```matlab
-function [Y, id_samp, para] = scml(X, varargin)
+function [Y, id_samp, para] = sude(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
 %   the ID of landmarks sampled by PPS. Each row in X represents an observation.
 % 
@@ -44,6 +44,7 @@ The 'main.m' file provides an example
 % Input data
 clear;
 data = csvread('benchmarks/ds3.csv');
+% data = textread('G:\MATLAB Drive\MATLAB\MNIST\iris.txt');
 
 % Obtain data size and true annotations
 [~, m] = size(data);
@@ -51,9 +52,9 @@ ref = data(:, m);
 X = data(:, 1:m-1);
 clear data
 
-% Perform scML embedding
+% Perform SUDE embedding
 t1 = clock;
-[Y, idx, para] = scml(X);
+[Y, idx, para] = sude(X,'NumNeighbors',10);
 t2 = clock;
 disp(['Elapsed time:', num2str(etime(t2,t1)),'s']);
 plotcluster2(Y, ref);
@@ -62,9 +63,9 @@ plotcluster2(Y, ref);
 
 > **Python**
 
-Python code of scML is in the 'scml_py' file, where the 'scml' function provides multiple hyperparameters for user configuration as follows
+Python code of SUDE is in the 'sude_py' file, where the 'sude' function provides multiple hyperparameters for user configuration as follows
 ```python
-def scml(
+def sude(
     X,
     no_dims = 2,
     k1 = 20,
@@ -109,7 +110,7 @@ The 'main.py' file provides an example
 ```python
 import pandas as pd
 import numpy as np
-from scml import scml
+from sude import sude
 import time
 import matplotlib.pyplot as plt
 
@@ -121,9 +122,9 @@ m = data.shape[1]
 X = data[:, :m - 1]
 ref = data[:, m - 1]
 
-# Perform scML embedding
+# Perform SUDE embedding
 start_time = time.time()
-Y = scml(X)
+Y = sude(X)
 end_time = time.time()
 print("Elapsed time:", end_time - start_time, 's')
 
