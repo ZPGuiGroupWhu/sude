@@ -43,7 +43,7 @@ The 'main.m' file provides an example
 ```matlab
 % Input data
 clear;
-data = csvread('benchmarks/ds3.csv');
+data = csvread('benchmarks/rice.csv');
 % data = textread('G:\MATLAB Drive\MATLAB\MNIST\iris.txt');
 
 % Obtain data size and true annotations
@@ -115,7 +115,7 @@ import time
 import matplotlib.pyplot as plt
 
 # Input data
-data = np.array(pd.read_csv('benchmarks/ds3.csv', header=None))
+data = np.array(pd.read_csv('benchmarks/rice.csv', header=None))
 
 # Obtain data size and true annotations
 m = data.shape[1]
