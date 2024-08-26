@@ -124,7 +124,7 @@ ref = data[:, m - 1]
 
 # Perform SUDE embedding
 start_time = time.time()
-Y = sude(X)
+Y = sude(X, k1=10)
 end_time = time.time()
 print("Elapsed time:", end_time - start_time, 's')
 
