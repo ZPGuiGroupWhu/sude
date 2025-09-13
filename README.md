@@ -6,7 +6,7 @@ We propose a scalable manifold learning (SUDE) method that can cope with large-s
 # How To Run
 > **MATLAB**
 
-MATLAB code of SUDE is in the ```sude_mat``` file, where the 'sude' function provides multiple hyperparameters for user configuration as follows 
+MATLAB code of SUDE is in the ```sude_mat``` file, where the ```sude``` function provides multiple hyperparameters for user configuration as follows 
 ```matlab
 function [Y, id_samp, para] = sude(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
