@@ -49,6 +49,15 @@ def sude(
                    Default: 50
 
     """
+
+    assert isinstance(no_dims, int) and no_dims > 0 and no_dims < X.shape[1]
+    assert isinstance(k1, int) and k1 > 0 and no_dims < X.shape[0]
+    assert normalize in [True, False]
+    assert large in [True, False]
+    assert initialize in ['le', 'pca', 'mds']
+    assert agg_coef >= 0
+    assert isinstance(T_epoch, int) and T_epoch > 0
+
     # Remove duplicate observations
     X, orig_id = np.unique(X, axis=0, return_inverse=True)
 
