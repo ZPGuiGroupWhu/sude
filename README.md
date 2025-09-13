@@ -5,7 +5,7 @@ We propose a scalable manifold learning (SUDE) method that can cope with large-s
 ![image](https://github.com/ZPGuiGroupWhu/sude/blob/master/github.png)
 
 # How To Run
-> **MATLAB**
+> ***MATLAB***
 
 MATLAB code of SUDE is in the ```sude_mat``` file, where the ```sude``` function provides multiple hyperparameters for user configuration as follows 
 ```matlab
