@@ -63,7 +63,27 @@ plotcluster2(Y, ref);
 
 > **Python**
 
-Python code of SUDE is in the ```sude_py``` file, where the ```sude``` function provides multiple hyperparameters for user configuration as follows
+### Installation
+Supported `python` versions are `3.8` and above.
+
+This project has been uploaded to [PyPI](https://pypi.org/project/sude/), supporting direct download and installation from pypi
+
+```
+pip install sude
+```
+
+### Manual Installation
+
+```
+git clone https://github.com/ZPGuiGroupWhu/SUDE-pkg.git
+cd SUDE-pkg
+pip install -e .
+```
+
+The SUDE algorithm package provides the `sude` function for dimension reduction.
+
+The description of the hyperparameters for user configuration are presented as follows
+
 ```python
 def sude(
     X,
@@ -106,7 +126,7 @@ def sude(
 """
 ```
 
-The ```main.py``` file provides an example
+After installing the library, you can use the `sude` function as follows:
 ```python
 import pandas as pd
 import numpy as np
