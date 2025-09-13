@@ -1,6 +1,7 @@
 ![image](https://img.shields.io/badge/MATLAB-R2022a-brightgreen) ![image](https://img.shields.io/badge/Python-3.11-yellow) ![image](https://img.shields.io/badge/R-4.1.0-red) [![DOI](https://zenodo.org/badge/714988567.svg)](https://doi.org/10.5281/zenodo.16792257) 
 # Sampling-enabled scalable manifold learning unveils discriminative cluster structure of high-dimensional data
-We propose a scalable manifold learning (SUDE) method that can cope with large-scale and high-dimensional data in an efficient manner. It starts by seeking a set of landmarks to construct the low-dimensional skeleton of the entire data, and then incorporates the non-landmarks into this skeleton based on the constrained locally linear embedding. This toolkit includes the main code of SUDE, and also two applications for preprocess scRNA-seq and ECG data.
+We propose a scalable manifold learning (SUDE) method that can cope with large-scale and high-dimensional data in an efficient manner. It starts by seeking a set of landmarks to construct the low-dimensional skeleton of the entire data, and then incorporates the non-landmarks into this skeleton based on the constrained locally linear embedding. This toolkit includes the main code of SUDE, and also two applications for preprocess scRNA-seq and ECG data. This paper has been published in ***Nature Machine Intelligence***, and more details can be seen https://www.nature.com/articles/s42256-025-01112-9.
+
 ![image](https://github.com/ZPGuiGroupWhu/scml/blob/main/github.png)
 
 # How To Run
@@ -153,3 +154,6 @@ BiocManager::install(c("BiocGenerics", "BiocSingular", "GenomeInfoDb", "GenomicR
 [Deep Learning Toolbox](https://ww2.mathworks.cn/products/deep-learning.html)
 
 [Signal Processing Toolbox](https://www.mathworks.com/products/signal.html)
+
+# Citation Request
+Peng, D., Gui, Z., Wei, W. et al. Sampling-enabled scalable manifold learning unveils the discriminative cluster structure of high-dimensional data. Nat Mach Intell (2025). https://doi.org/10.1038/s42256-025-01112-9
