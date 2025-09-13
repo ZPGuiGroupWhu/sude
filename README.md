@@ -6,7 +6,7 @@ We propose a scalable manifold learning (SUDE) method that can cope with large-s
 # How To Run
 > **MATLAB**
 
-MATLAB code of SUDE is in the 'sude_mat' file, where the 'sude' function provides multiple hyperparameters for user configuration as follows 
+MATLAB code of SUDE is in the ```sude_mat``` file, where the 'sude' function provides multiple hyperparameters for user configuration as follows 
 ```matlab
 function [Y, id_samp, para] = sude(X, varargin)
 %   This function returns representation of the N by D matrix X in the lower-dimensional space and 
@@ -38,7 +38,7 @@ function [Y, id_samp, para] = sude(X, varargin)
 %                    Default: 50 
 ```
 
-The 'main.m' file provides an example
+The ```main.m``` file provides an example
 ```matlab
 % Input data
 clear;
@@ -62,7 +62,7 @@ plotcluster2(Y, ref);
 
 > **Python**
 
-Python code of SUDE is in the 'sude_py' file, where the 'sude' function provides multiple hyperparameters for user configuration as follows
+Python code of SUDE is in the ```sude_py``` file, where the ```sude``` function provides multiple hyperparameters for user configuration as follows
 ```python
 def sude(
     X,
@@ -105,7 +105,7 @@ def sude(
 """
 ```
 
-The 'main.py' file provides an example
+The ```main.py``` file provides an example
 ```python
 import pandas as pd
 import numpy as np
