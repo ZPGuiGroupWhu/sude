@@ -18,9 +18,9 @@ pip install sude
 ```
 
 For best performance, install the optional Numba acceleration dependencies:
-
+```bash
 pip install "sude[accelerate]"
-
+```
 If Numba is installed, SUDE automatically uses accelerated kernels. Otherwise,
 it falls back to the pure Python implementation.
 
