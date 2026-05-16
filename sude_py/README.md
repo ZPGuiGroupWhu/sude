@@ -17,11 +17,12 @@ from sude import SUDE, sude
 pip install sude
 ```
 
-For the optional Numba-accelerated kernels:
+For best performance, install the optional Numba acceleration dependencies:
 
-```bash
 pip install "sude[accelerate]"
-```
+
+If Numba is installed, SUDE automatically uses accelerated kernels. Otherwise,
+it falls back to the pure Python implementation.
 
 ## Usage
 
