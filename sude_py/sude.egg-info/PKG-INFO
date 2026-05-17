@@ -1,3 +1,27 @@
+Metadata-Version: 2.1
+Name: sude
+Version: 0.2.0
+Summary: Optimized SUDE manifold learning with a scikit-learn compatible API.
+Author-email: pdh <pengdh@whu.edu.cn>
+License: MIT
+Project-URL: Homepage, https://github.com/ZPGuiGroupWhu/SUDE-pkg
+Project-URL: Repository, https://github.com/ZPGuiGroupWhu/SUDE-pkg.git
+Project-URL: Issues, https://github.com/ZPGuiGroupWhu/SUDE-pkg/issues
+Keywords: manifold learning,dimension reduction,embedding,landmark sampling
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: test
+
 # SUDE
 
 SUDE is an optimized Python package for scalable manifold learning with
