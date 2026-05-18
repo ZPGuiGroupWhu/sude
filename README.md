@@ -139,7 +139,7 @@ def sude(
     """
 ```
 
-After installing the library, you can use the `sude` function as follows:
+The package now exposes both a scikit-learn style estimator class and a function wrapper with matching parameter names.
 ```python
 import numpy as np
 from sude import SUDE
