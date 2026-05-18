@@ -86,71 +86,87 @@ The description of the hyperparameters for user configuration are presented as f
 
 ```python
 def sude(
-    X,
-    no_dims = 2,
-    k1 = 20,
-    normalize = True,
-    large = False,
-    initialize = 'le',
-    agg_coef = 1.2,
-    T_epoch = 50,
+    X: np.ndarray,
+    n_components: int = 2,
+    *,
+    n_neighbors: int = 20,
+    normalize: bool = True,
+    large: bool = False,
+    init: Literal["le", "pca", "mds"] = "le",
+    agg_coef: float = 1.2,
+    max_iter: int = 50,
 ):
-"""
-    This function returns representation of the N by D matrix X in the lower-dimensional space. Each row in X
-    represents an observation.
+    """
+    Return a lower-dimensional representation of the N by D matrix X.
 
-    Parameters are:
+    SUDE is a sampling-based scalable manifold learning method for uniform
+    and discriminative embedding of large-scale and high-dimensional data. It
+    first samples landmarks to construct the low-dimensional skeleton of the
+    data, then incorporates non-landmark samples into this skeleton with
+    constrained locally linear embedding. Each row in X represents one
+    observation.
 
-    'no_dims'      - A positive integer specifying the number of dimension of the representation Y.
-                   Default: 2
-    'k1'           - A non-negative integer specifying the number of nearest neighbors for PPS to
-                   sample landmarks. It must be smaller than N.
-                   Default: adaptive
-    'normalize'    - Logical scalar. If true, normalize X using min-max normalization. If features in
-                   X are on different scales, 'Normalize' should be set to true because the learning
-                   process is based on nearest neighbors and features with large scales can override
-                   the contribution of features with small scales.
-                   Default: True
-    'large'        - Logical scalar. If true, the data can be split into multiple blocks to avoid the problem
-                   of memory overflow, and the gradient can be computed block by block using 'learning_l' function.
-                   Default: False
-    'initialize'   - A string specifying the method for initializing Y before manifold learning.
-        'le'       - Laplacian eigenmaps.
-        'pca'      - Principal component analysis.
-        'mds'      - Multidimensional scaling.
-                   Default: 'le'
-    'agg_coef'     - A positive scalar specifying the aggregation coefficient.
-                   Default: 1.2
-    'T_epoch'      - Maximum number of epochs to take.
-                   Default: 50
-"""
+    Parameters
+    ----------
+    X : array-like of shape (n_samples, n_features)
+        Input data matrix.
+    n_components : int, default=2
+        Number of dimensions in the learned embedding. Corresponds to
+        ``no_dims`` in the original function interface and to the output
+        dimension in the paper.
+    n_neighbors : int, default=20
+        Number of nearest neighbors used by PPS to sample landmarks.
+        Corresponds to ``k1`` in the paper. It must be smaller than the number
+        of samples when positive. Set to 0 to disable landmark sampling.
+    normalize : bool, default=True
+        Whether to apply min-max normalization to the input data before
+        nearest-neighbor learning.
+    large : bool, default=False
+        Whether to use memory-bounded learning for large data.
+    init : {"le", "pca", "mds"}, default="le"
+        Initialization method for the embedding. Corresponds to ``initialize``
+        in the original function interface and paper-style notation.
+    agg_coef : float, default=1.2
+        Aggregation coefficient. Corresponds to ``γ`` in the paper.
+    max_iter : int, default=50
+        Maximum number of optimization epochs. Corresponds to ``T_epoch`` in
+        the paper.
+
+    Returns
+    -------
+    Y : ndarray of shape (n_samples, n_components)
+        The learned embedding.
+    """
 ```
 
 After installing the library, you can use the `sude` function as follows:
 ```python
-import time
 import numpy as np
+from sude import SUDE
+import time
 import matplotlib.pyplot as plt
 
-from sude import sude
+# Input data
+data = np.loadtxt("benchmarks/rice.csv", delimiter=",")
 
-data_path = r"benchmarks\rice.csv"
+# Obtain data size and true annotations
+m = data.shape[1]
+X = data[:, :m - 1]
+ref = data[:, m - 1]
 
-data = np.loadtxt(data_path, delimiter=",")
-X = data[:, :-1]
-labels = data[:, -1]
+# Fit a scikit-learn style estimator
+start_time = time.time()
+model = SUDE(
+    n_components=2,
+    n_neighbors=10,
+    init="le",
+    max_iter=50,
+)
+Y = model.fit_transform(X)
+end_time = time.time()
+print("Elapsed time:", end_time - start_time, 's')
 
-start = time.perf_counter()
-Y = sude(X, no_dims=2, k1=20)
-elapsed = time.perf_counter() - start
-
-print(f"Embedding shape: {Y.shape}")
-print(f"Runtime: {elapsed:.2f} seconds")
-
-plt.figure(figsize=(7, 6))
-plt.scatter(Y[:, 0], Y[:, 1], c=labels, cmap="tab10", s=2)
-plt.colorbar(label="label")
-plt.title("Rice SUDE")
+plt.scatter(Y[:, 0], Y[:, 1], c=ref, cmap='tab10', s=4)
 plt.show()
 ```
 
