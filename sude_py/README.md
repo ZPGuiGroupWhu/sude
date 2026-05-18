@@ -1,4 +1,4 @@
-The Python versions of SUDE can be found at: https://github.com/ZPGuiGroupWhu/SUDE-pkg.
+**The Python versions of SUDE can be found at: https://github.com/ZPGuiGroupWhu/SUDE-pkg.**
 
 ## Project layout
 
