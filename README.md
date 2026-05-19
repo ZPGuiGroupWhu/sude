@@ -10,7 +10,7 @@ We propose a scalable manifold learning (SUDE) method that can cope with large-s
 
 We have updated both the Python and MATLAB implementations of **SUDE** with substantial performance optimizations while preserving the original embedding behavior and accuracy.
 
-#### Python Version (SUDE v0.2.1) Released
+#### Python Version (v0.2.1) Released
 
 The Python implementation now supports **Numba acceleration** for several computational bottlenecks, including:
 
