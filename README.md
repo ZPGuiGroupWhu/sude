@@ -6,11 +6,11 @@ We propose a scalable manifold learning (SUDE) method that can cope with large-s
 
 ## 🔥 News
 
-### [2026-05] SUDE v0.2.1 Released (Python & MATLAB Optimizations)
+### [2026-05-18] Python & MATLAB Optimizations
 
 We have updated both the Python and MATLAB implementations of **SUDE** with substantial performance optimizations while preserving the original embedding behavior and accuracy.
 
-#### Python Version (SUDE v0.2.1)
+#### Python Version (SUDE v0.2.1) Released
 
 The Python implementation now supports **Numba acceleration** for several computational bottlenecks, including:
 
@@ -20,7 +20,7 @@ The Python implementation now supports **Numba acceleration** for several comput
 
 When the dataset size exceeds **3000 samples** or the number of landmark points exceeds **512**, Numba JIT acceleration is automatically enabled by default. Please note that the first execution may require additional compilation time due to JIT initialization.
 
-The optimized Python version achieves approximately **6.4×–27.4×** speedup on large-scale datasets compared with the original implementation.
+The optimized Python version achieves approximately **10×–20×** speedup on large-scale datasets compared with the original implementation.
 
 #### MATLAB Version Update
 
@@ -34,7 +34,6 @@ Instead of constructing a full dense probability matrix, the updated implementat
 
 The optimized MATLAB version achieves approximately **1.1×–3.4×** speedup compared with the original implementation.
 
-These optimizations have been validated on several large-scale datasets, including **Shuttle, CIFAR10, MNIST, Fashion-MNIST, and AG's News**.
 
 # How To Run
 
